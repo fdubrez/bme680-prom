@@ -11,6 +11,33 @@ pip install -r requirements.txt
 python script.py
 ```
 
+Make it a daemon using systemd
+
+```
+# /etc/systemd/system/bme680.service
+[Unit]
+Description="bme680"
+
+[Service]
+ExecStart=<project_dir>/.venv/bin/python script.py
+WorkingDirectory=<project_dir>
+Restart=always
+RestartSec=10
+StandardOutput=file:/var/log/bme680.log
+StandardError=file:/var/log/bme680.err.log
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Activate the service and start it
+
+```shell
+sudo systemctl enable bme680.service
+sudo systemctl start bme680.service
+sudo systemctl status bme680.service
+```
+
 ## Notes
 
 * use a "lite" raspberry OS 
